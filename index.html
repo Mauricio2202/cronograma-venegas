@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma de Actividades - Proyecto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            margin-top: 50px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        td:hover {
+            background-color: #f1f1f1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .completado {
+            background-color: #81c784;
+            color: white;
+        }
+
+        .en-progreso {
+            background-color: #ffeb3b;
+            color: black;
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cronograma de Actividades - Proyecto</h1>
+        <table id="cronograma">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Actividad</th>
+                    <th>Responsables</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="task1">
+                    <td>03/12/2024</td>
+                    <td>Inicio del proyecto</td>
+                    <td>Todos</td>
+                    <td class="en-progreso">En progreso</td>
+                </tr>
+                <tr id="task2">
+                    <td>06/12/2024</td>
+                    <td>Entrega de Modelo (POO) y pruebas con base de datos</td>
+                    <td>Mariel y Mireya</td>
+                    <td class="en-progreso">En progreso</td>
+                </tr>
+                <tr id="task3">
+                    <td>06/12/2024</td>
+                    <td>Entrega de Plantilla (POO) y pruebas con base de datos</td>
+                    <td>Brandon y Román</td>
+                    <td class="en-progreso">En progreso</td>
+                </tr>
+                <tr id="task4">
+                    <td>09/12/2024</td>
+                    <td>Avance de la creación de la base de datos modelada</td>
+                    <td>Josías y Adrián</td>
+                    <td class="en-progreso">En progreso</td>
+                </tr>
+                <tr id="task5">
+                    <td>12/12/2024</td>
+                    <td>Pruebas del login con base de datos y integración del Modelo y Plantilla</td>
+                    <td>Gabriel y Mauricio</td>
+                    <td class="en-progreso">En progreso</td>
+                </tr>
+                <tr id="task6">
+                    <td>13/12/2024</td>
+                    <td>Pruebas finales y revisión del proyecto</td>
+                    <td>Gabriel y Mauricio</td>
+                    <td class="en-progreso">En progreso</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Nota sobre la comunicación y reglas -->
+        <div class="note">
+            <h3>Nota:</h3>
+            <p>Es importante que cualquier duda o inconveniente se comunique de inmediato con cualquier miembro del equipo. Recuerda que:</p>
+            <ul>
+                <li><strong>Regla 1:</strong> Las preguntas deben hacerse de manera clara y con los detalles necesarios para evitar malentendidos.</li>
+                <li><strong>Regla 2:</strong> Es importante mantener una comunicación abierta y constante durante todo el proceso sin dejar que intervengan las percepciones de cada quien.</li>
+                <li><strong>Regla 3:</strong> Saquemos adelante este proyecto que sí podemos.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const estadoCells = document.querySelectorAll('td:nth-child(4)');
+            // Cargar el estado desde el localStorage
+            cargarEstado();
+
+            estadoCells.forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const currentStatus = cell.innerText;
+                    let newStatus, newClass;
+                    
+                    if (currentStatus === 'En progreso') {
+                        newStatus = 'Completado';
+                        newClass = 'completado';
+                    } else {
+                        newStatus = 'En progreso';
+                        newClass = 'en-progreso';
+                    }
+
+                    // Actualiza el estado visualmente
+                    cell.innerText = newStatus;
+                    cell.classList.remove('completado', 'en-progreso');
+                    cell.classList.add(newClass);
+
+                    // Guarda el estado en localStorage
+                    const taskId = cell.parentElement.id;
+                    localStorage.setItem(taskId, newStatus);
+                });
+            });
+
+            // Función para cargar los estados desde localStorage
+            function cargarEstado() {
+                const taskIds = ['task1', 'task2', 'task3', 'task4', 'task5', 'task6'];
+                taskIds.forEach(taskId => {
+                    const savedStatus = localStorage.getItem(taskId);
+                    const taskCell = document.querySelector(`#${taskId} td:nth-child(4)`);
+                    
+                    if (savedStatus) {
+                        taskCell.innerText = savedStatus;
+                        const newClass = savedStatus === 'Completado' ? 'completado' : 'en-progreso';
+                        taskCell.classList.add(newClass);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
